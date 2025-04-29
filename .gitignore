@@ -1,0 +1,17 @@
+# Ignore all files in the node_modules folder
+node_modules
+
+# Keep environment variables out of version control
+.env
+.env.dev
+.env.prod
+
+# Ignore all files macos creates
+.DS_Store
+
+# Ignore all files in the build output
+dist/
+build/
+
+# Ignore all files in the logs output
+logs/
