@@ -6,6 +6,7 @@ import compression from "compression";
 import cors from "cors";
 import morgan from "morgan";
 import passport from "./config/passport";
+import routes from "./routes/v1";
 
 import errorMiddleware from "./middlewares/error";
 
@@ -33,6 +34,7 @@ app.use(passport.initialize());
 app.get("/", (_, res) => {
   res.send("Node Express Rest API");
 });
+app.use("/api/v1", routes);
 
 // -- Error Handling --
 app.use(errorMiddleware);

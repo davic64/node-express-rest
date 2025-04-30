@@ -6,8 +6,8 @@ export const createUserSchema = z.object({
     .min(1, { message: "Name can not be empty" })
     .min(3, { message: "Name must be at least 3 characters" })
     .max(20, { message: "Name must be at most 20 characters" })
-    .refine((value) => /^[a-zA-Z]+$/.test(value), {
-      message: "Name must contain only letters",
+    .refine((value) => /^[a-zA-Z\s]+$/.test(value), {
+      message: "Name must contain only letters and spaces",
     }),
 
   email: z
@@ -26,3 +26,5 @@ export const createUserSchema = z.object({
       message: "Password can not be empty",
     }),
 });
+
+export default { createUserSchema };
