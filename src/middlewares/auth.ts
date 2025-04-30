@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import passport from "../config/passport";
-import { UnauthorizedError } from "../utils/errors";
+import httpStatus from "http-status";
+import { ApiError } from "../utils/errors";
 
 export const authJWT = (req: Request, res: Response, next: NextFunction) => {
   passport.authenticate(
@@ -12,7 +13,7 @@ export const authJWT = (req: Request, res: Response, next: NextFunction) => {
         let message = "Unauthorized";
         if (info instanceof Error) message = info.message;
 
-        return next(new UnauthorizedError(message));
+        return next(new ApiError(httpStatus.UNAUTHORIZED, message));
       }
 
       req.user = user;

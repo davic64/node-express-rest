@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction, RequestHandler } from "express";
 import { z } from "zod";
-import { BadRequestError } from "../utils/errors";
+import httpStaus from "http-status";
+import { ApiError } from "../utils/errors";
 
 const validate = (
   schema: z.AnyZodObject,
@@ -16,7 +17,8 @@ const validate = (
         parsed.error.flatten().fieldErrors
       ).flat() as string[];
 
-      const validateError = new BadRequestError(
+      const validateError = new ApiError(
+        httpStaus.BAD_REQUEST,
         "Validation data failed",
         validationErrors
       );
