@@ -8,7 +8,9 @@
     "dev": "ts-node-dev src/index.ts",
     "build": "cross-env NODE_ENV=production tsc",
     "prisma:generate": "npx prisma generate",
-    "prisma:migrate": "npx prisma migrate dev"
+    "prisma:migrate": "npx prisma migrate dev",
+    "docker:dev": "docker-compose -f docker-compose.yml -f docker-compose.dev.yml --env-file .env.dev up --build -d",
+    "docker:prod": "docker-compose -f docker-compose.yml -f docker-compose.prod.yml --env-file .env.prod up --build -d"
   },
   "devDependencies": {
     "@types/compression": "^1.7.5",

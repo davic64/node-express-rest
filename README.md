@@ -33,6 +33,7 @@ yarn dev
 
 ## TODO
 
-- [ ] Add docker
 - [ ] Add documentation
+- [ ] Add Linting and Prettier
+- [ ] Add husky commit hooks
 - [ ] Add CI/CD
