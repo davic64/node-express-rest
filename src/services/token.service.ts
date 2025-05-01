@@ -28,12 +28,14 @@ export interface AuthTokensResponse {
  */
 const generateToken = (
   userId: string,
+  role: string,
   expiresIn: Dayjs,
   type: TokenType,
   secret = config.JWT_SECRET ?? 'secret',
 ) => {
   const payload: TokenPayload = {
     sub: userId,
+    role,
     iat: dayjs().unix(),
     exp: expiresIn.unix(),
     type,
@@ -97,10 +99,10 @@ const verifyToken = async (token: string, type: TokenType): Promise<Token> => {
  */
 const generateAuthTokens = async (user: any): Promise<AuthTokensResponse> => {
   const accesTokenExpires = dayjs().add(config.JWT_ACCESS_EXPIRATION_MINUTES, 'minutes');
-  const accessToken = generateToken(user.id, accesTokenExpires, TokenType.ACCESS);
+  const accessToken = generateToken(user.id, user.role, accesTokenExpires, TokenType.ACCESS);
 
   const refreshTokenExpires = dayjs().add(config.JWT_REFRESH_EXPIRATION_DAYS, 'days');
-  const refreshToken = generateToken(user.id, refreshTokenExpires, TokenType.REFRESH);
+  const refreshToken = generateToken(user.id, user.role, refreshTokenExpires, TokenType.REFRESH);
   await saveToken(refreshToken, user.id, refreshTokenExpires, TokenType.REFRESH);
 
   return {
@@ -127,7 +129,7 @@ const generateResetPasswordToken = async (email: string): Promise<string> => {
   }
 
   const expires = dayjs().add(10, 'minutes');
-  const resetPasswordToken = generateToken(user.id, expires, TokenType.RESET_PASSWORD);
+  const resetPasswordToken = generateToken(user.id, user.role, expires, TokenType.RESET_PASSWORD);
   await saveToken(resetPasswordToken, user.id, expires, TokenType.RESET_PASSWORD);
   return resetPasswordToken;
 };
@@ -138,9 +140,13 @@ const generateResetPasswordToken = async (email: string): Promise<string> => {
  * @param {string} email
  * @returns {Promise<string>}
  */
-const generateVerifyEmailToken = async (user: { id: string; email: string }): Promise<string> => {
+const generateVerifyEmailToken = async (user: {
+  id: string;
+  email: string;
+  role: string;
+}): Promise<string> => {
   const expires = dayjs().add(5, 'minutes');
-  const verifyEmailToken = generateToken(user.id, expires, TokenType.VERIFY_EMAIL);
+  const verifyEmailToken = generateToken(user.id, user.role, expires, TokenType.VERIFY_EMAIL);
   await saveToken(verifyEmailToken, user.id, expires, TokenType.VERIFY_EMAIL);
   return verifyEmailToken;
 };

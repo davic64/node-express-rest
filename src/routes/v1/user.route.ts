@@ -3,11 +3,11 @@ import { Router } from 'express';
 import { userController } from '../../controllers';
 import validate from '../../middlewares/validate';
 import { validateUser } from '../../validations';
-import { authJWT } from '../../middlewares/auth';
+import authJWT from '../../middlewares/auth';
 
 const router = Router();
 
-router.use(authJWT);
+router.use(authJWT('manageUsers'));
 
 router
   .route('/')

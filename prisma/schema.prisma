@@ -15,6 +15,7 @@ model User {
   password        String
   createdAt       DateTime @default(now())
   isEmailVerified Boolean  @default(false)
+  role            RoleType @default(USER)
   Token           Token[]
 }
 
@@ -35,4 +36,9 @@ enum TokenType {
   REFRESH
   RESET_PASSWORD
   VERIFY_EMAIL
+}
+
+enum RoleType {
+  ADMIN
+  USER
 }

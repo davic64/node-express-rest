@@ -3,7 +3,7 @@ import express from 'express';
 import validate from '../../middlewares/validate';
 import authValidation from '../../validations/auth.validation';
 import { authController } from '../../controllers';
-import { authJWT } from '../../middlewares/auth';
+import authJWT from '../../middlewares/auth';
 
 const router = express.Router();
 
@@ -25,7 +25,7 @@ router.post(
   validate(authValidation.resetPasswordSchema),
   authController.resetPassword,
 );
-router.post('/send-verification-email', authJWT, authController.sendVerificationEmail);
+router.post('/send-verification-email', authJWT(), authController.sendVerificationEmail);
 router.post(
   '/verify-email',
   validate(authValidation.verifyEmailSchema),

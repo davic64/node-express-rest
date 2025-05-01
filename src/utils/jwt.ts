@@ -5,6 +5,7 @@ import config from '../config/config';
 
 export interface TokenPayload {
   sub: string;
+  role: string;
   iat: number;
   exp: any;
   type: TokenType;
