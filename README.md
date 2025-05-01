@@ -31,6 +31,18 @@ yarn install
 yarn dev
 ```
 
+## Run Docker
+
+```bash
+yarn docker:dev
+```
+
+Run prisma migrations:
+
+```bash
+yarn prisma:migrate
+```
+
 ## TODO
 
 - [ ] Add documentation
