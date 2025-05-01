@@ -1,5 +1,6 @@
-import dotenv from 'dotenv';
 import path from 'path';
+
+import dotenv from 'dotenv';
 import winston from 'winston';
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
@@ -59,6 +60,8 @@ interface AppConfig {
   JWT_EXPIRATION: any;
   JWT_ACCESS_EXPIRATION_MINUTES: number;
   JWT_REFRESH_EXPIRATION_DAYS: number;
+  RESEND_API_KEY: string;
+  MAIL_FROM: string;
 }
 
 const config: AppConfig = {
@@ -69,6 +72,8 @@ const config: AppConfig = {
   JWT_EXPIRATION: process.env.JWT_EXPIRATION || '1d',
   JWT_ACCESS_EXPIRATION_MINUTES: parseInt(process.env.JWT_ACCESS_EXPIRATION_MINUTES!) || 30,
   JWT_REFRESH_EXPIRATION_DAYS: parseInt(process.env.JWT_REFRESH_EXPIRATION_DAYS!) || 10,
+  RESEND_API_KEY: process.env.RESEND_API_KEY!,
+  MAIL_FROM: process.env.MAIL_FROM!,
 };
 
 if (!config.DATABASE_URL) {

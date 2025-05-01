@@ -3,7 +3,7 @@ const exclude = <Type, Key extends keyof Type>(obj: Type, keys: Key[]): Omit<Typ
   for (const key of keys) {
     delete clone[key];
   }
-  return obj;
+  return clone; // Cambiado para devolver el objeto modificado
 };
 
 export default exclude;

@@ -1,18 +1,19 @@
-import { generateToken as newToken, TokenPayload, verifyToken as tokenExist } from '../utils/jwt';
 import dayjs, { Dayjs } from 'dayjs';
 import { Token, TokenType } from '@prisma/client';
-import prisma from '@/prisma';
+import httpStatus from 'http-status';
+
+import { generateToken as newToken, TokenPayload, verifyToken as tokenExist } from '../utils/jwt';
+import prisma from '../prisma';
 import config from '../config/config';
 import userService from './user.service';
 import { ApiError } from '../utils/errors';
-import httpStatus from 'http-status';
 
 interface TokenResponse {
   token: string;
   expires: Date;
 }
 
-interface AuthTokensResponse {
+export interface AuthTokensResponse {
   access: TokenResponse;
   refresh?: TokenResponse;
 }
@@ -25,7 +26,12 @@ interface AuthTokensResponse {
  * @param {string} secret
  * @returns {string}
  */
-const generateToken = (userId: string, expiresIn: Dayjs, type: TokenType, secret = 'secret') => {
+const generateToken = (
+  userId: string,
+  expiresIn: Dayjs,
+  type: TokenType,
+  secret = config.JWT_SECRET ?? 'secret',
+) => {
   const payload: TokenPayload = {
     sub: userId,
     iat: dayjs().unix(),
@@ -72,7 +78,7 @@ const saveToken = async (
  * @returns {Promise<Token>}
  */
 const verifyToken = async (token: string, type: TokenType): Promise<Token> => {
-  const payload = await tokenExist(token, config.JWT_SECRET);
+  const payload = tokenExist(token, config.JWT_SECRET);
   const userId = payload.sub;
   const tokenData = await prisma.token.findFirst({
     where: { token, type, userId, blacklisted: false },
@@ -89,7 +95,7 @@ const verifyToken = async (token: string, type: TokenType): Promise<Token> => {
  * @param {ObjectId} userId
  * @returns {Promise<AuthTokensResponse>}
  */
-const generateAuthTokens = async (user: { id: string }): Promise<AuthTokensResponse> => {
+const generateAuthTokens = async (user: any): Promise<AuthTokensResponse> => {
   const accesTokenExpires = dayjs().add(config.JWT_ACCESS_EXPIRATION_MINUTES, 'minutes');
   const accessToken = generateToken(user.id, accesTokenExpires, TokenType.ACCESS);
 
@@ -114,13 +120,13 @@ const generateAuthTokens = async (user: { id: string }): Promise<AuthTokensRespo
  * @param {string} email
  * @returns {Promise<string>}
  */
-const genereteResetPasswordToken = async (email: string): Promise<string> => {
+const generateResetPasswordToken = async (email: string): Promise<string> => {
   const user = await userService.getUserByEmail(email);
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, 'No users found with this email');
   }
 
-  const expires = dayjs().add(1, 'minutes');
+  const expires = dayjs().add(10, 'minutes');
   const resetPasswordToken = generateToken(user.id, expires, TokenType.RESET_PASSWORD);
   await saveToken(resetPasswordToken, user.id, expires, TokenType.RESET_PASSWORD);
   return resetPasswordToken;
@@ -139,11 +145,27 @@ const generateVerifyEmailToken = async (user: { id: string; email: string }): Pr
   return verifyEmailToken;
 };
 
+/**
+ * Delete expired tokens
+ * @returns {Promise<void>}
+ */
+const deleteExpiredTokens = async (): Promise<void> => {
+  const now = dayjs();
+  await prisma.token.deleteMany({
+    where: {
+      expiresIn: {
+        lt: now.toDate(),
+      },
+    },
+  });
+};
+
 export default {
   generateToken,
   saveToken,
   verifyToken,
   generateAuthTokens,
-  genereteResetPasswordToken,
+  generateResetPasswordToken,
   generateVerifyEmailToken,
+  deleteExpiredTokens,
 };

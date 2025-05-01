@@ -12,10 +12,6 @@ trim_trailing_whitespace = true
 indent_style = space
 indent_size = 2
 
-# 4 space indentation for Python
-[*.py]
-indent_size = 4
-
 # Tab indentation for Makefiles
 [Makefile]
 indent_style = tab

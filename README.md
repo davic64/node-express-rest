@@ -45,5 +45,7 @@ yarn prisma:migrate
 
 ## TODO
 
+- [ ] Add roles and permissions
+- [ ] Add cronjobs for delete expired tokens (node-cron)
 - [ ] Add documentation
 - [ ] Add CI/CD

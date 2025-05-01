@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
-import config from '../config/config';
 import { TokenType } from '@prisma/client';
+
+import config from '../config/config';
 
 export interface TokenPayload {
   sub: string;
@@ -14,5 +15,5 @@ export const generateToken = (payload: TokenPayload, secret: string): string => 
 };
 
 export const verifyToken = (token: string, secret: string): TokenPayload => {
-  return jwt.verify(token, secret ?? config.JWT_SECRET) as TokenPayload;
+  return jwt.verify(token, secret) as TokenPayload;
 };

@@ -1,6 +1,7 @@
 const eslintPluginImport = require('eslint-plugin-import');
 const eslintPluginPrettier = require('eslint-plugin-prettier');
 const typescriptEslintPlugin = require('@typescript-eslint/eslint-plugin');
+const typescriptEslintParser = require('@typescript-eslint/parser');
 
 module.exports = [
   {
@@ -8,7 +9,7 @@ module.exports = [
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
-      parser: '@typescript-eslint/parser',
+      parser: typescriptEslintParser,
     },
     plugins: {
       import: eslintPluginImport,
@@ -25,7 +26,7 @@ module.exports = [
         },
       ],
       'no-console': 'warn',
-      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     },
   },

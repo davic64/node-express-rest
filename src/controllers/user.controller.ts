@@ -1,6 +1,7 @@
 import httpStatus from 'http-status';
-import { userService } from '../services';
 import { Request, Response } from 'express';
+
+import { userService } from '../services';
 import { ApiError } from '../utils/errors';
 
 const createUser = async (req: Request, res: Response) => {
@@ -45,7 +46,7 @@ const updateUser = async (req: Request, res: Response) => {
 const deleteUser = async (req: Request, res: Response) => {
   const { userId } = req.params;
   await userService.deleteUser(userId);
-  res.status(httpStatus.NO_CONTENT).json({});
+  res.status(httpStatus.NO_CONTENT).send();
 };
 
 export default {

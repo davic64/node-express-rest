@@ -9,12 +9,13 @@ datasource db {
 
 // --- Models ---
 model User {
-  id        String   @id @default(uuid())
-  name      String
-  email     String   @unique
-  password  String
-  createdAt DateTime @default(now())
-  Token     Token[]
+  id              String   @id @default(uuid())
+  name            String
+  email           String   @unique
+  password        String
+  createdAt       DateTime @default(now())
+  isEmailVerified Boolean  @default(false)
+  Token           Token[]
 }
 
 model Token {
