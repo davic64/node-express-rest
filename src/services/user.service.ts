@@ -92,6 +92,7 @@ const getUserByEmail = async <Key extends keyof User>(
 
   return existingUser as Pick<User, Key> | null;
 };
+
 /**
  * Update user by id
  * @param {ObjectId} userId
