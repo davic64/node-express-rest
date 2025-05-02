@@ -15,6 +15,8 @@ This is a simple boilerplate for a REST API using Node and Express.
 - cors : CORS middleware.
 - passport: Authentication middleware.
 - cross-env : Cross-platform environment variables.
+- resend: Email service.
+- bcrypt: Password hashing.
 
 ## Getting Started
 
@@ -45,7 +47,7 @@ yarn prisma:migrate
 
 ## TODO
 
-- [ ] Add roles and permissions
+- [ ] Add React Email for templates (react-email)
 - [ ] Add cronjobs for delete expired tokens (node-cron)
 - [ ] Add documentation
 - [ ] Add CI/CD
